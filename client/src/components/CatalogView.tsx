@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -21,6 +20,7 @@ import { ShareModal } from "./ShareModal";
 import { ThemeToggle } from "./ThemeToggle";
 import type { Project, ProjectCategory, CollectionType } from "@shared/schema";
 import { categoryLabels, styleLabels } from "@shared/schema";
+import { projects as staticProjects } from "@/data/projects";
 
 import livingRoomImg from "@assets/generated_images/luxury_living_room_interior.png";
 import bedroomImg from "@assets/generated_images/luxury_bedroom_interior.png";
@@ -565,9 +565,7 @@ export function CatalogView({ onBack }: CatalogViewProps) {
   const [detailOpen, setDetailOpen] = useState(false);
   const [viewingCollection, setViewingCollection] = useState<CollectionType | null>(null);
 
-  const { data: projects, isLoading } = useQuery<Project[]>({
-    queryKey: ["/api/projects"],
-  });
+  const projects = staticProjects;
 
   const categories = Object.entries(categoryLabels) as [ProjectCategory, string][];
 
@@ -664,12 +662,7 @@ export function CatalogView({ onBack }: CatalogViewProps) {
       </section>
 
       <main>
-        {isLoading ? (
-          <div className="py-20 text-center">
-            <div className="w-12 h-12 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="mt-4 text-muted-foreground">Loading collections...</p>
-          </div>
-        ) : viewingCollection ? (
+        {viewingCollection ? (
           <FullCollectionView
             collection={viewingCollection}
             projects={getProjectsByCollection(viewingCollection)}

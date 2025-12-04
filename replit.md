@@ -68,6 +68,36 @@ npm run dev
 ```
 Server runs on port 5000.
 
+## Netlify Deployment
+This project is fully Netlify deployable as a static site.
+
+### Build Command
+```bash
+npm run build:static
+```
+
+### Publish Directory
+```
+dist/public
+```
+
+### Configuration
+A `netlify.toml` file is included with:
+- Build command: `npm run build:static`
+- Publish directory: `dist/public`
+- SPA redirect for client-side routing
+- Node.js 20 environment
+
+### Deployment Steps
+1. Connect your GitHub repository to Netlify
+2. Netlify will auto-detect the `netlify.toml` configuration
+3. Deploy and your site will be live
+
+### Architecture Notes
+- Frontend uses static data embedded in the bundle (no API calls needed)
+- All project data is in `client/src/data/projects.ts`
+- Images are served from the `/images` folder (copied from `client/public/images`)
+
 ## Recent Changes
 - December 4, 2024: Myntra-style UI upgrade
   - Replaced category icons with AI-generated interior design images
