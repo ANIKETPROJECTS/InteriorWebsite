@@ -1,0 +1,106 @@
+Project: Dynamic Digital Interior Design Catalogue (Frontend)
+Create a modern, professional digital catalogue frontend for an interior design company with the following requirements:
+Core Features:
+
+Portfolio/Gallery System
+
+Beautiful grid/masonry layout showcasing interior design projects with high-quality images
+Filter by categories (Living Room, Bedroom, Kitchen, Bathroom, Office, Commercial, etc.)
+Filter by style (Modern, Contemporary, Minimalist, Traditional, Industrial, Scandinavian, etc.)
+Search functionality
+Individual project detail pages with image galleries, descriptions, and specifications
+Smooth image lightbox/modal viewer with navigation
+
+
+Sharing Capabilities
+
+Share buttons for WhatsApp, Email, and direct link copying
+Social media share options (Facebook, Pinterest, Instagram)
+"Copy Link" functionality with visual confirmation
+Optional: QR code generation for easy mobile sharing
+
+
+Sample Content
+
+Include 8-12 dummy interior design projects with placeholder images
+Varied categories and styles to demonstrate filtering
+Professional placeholder text for descriptions
+
+
+
+Design Requirements:
+
+Ultra-modern, visually stunning UI with smooth animations and transitions
+Professional aesthetic suitable for high-end interior design brand
+Clean, minimalist design with focus on imagery
+Elegant typography (consider fonts like Playfair Display, Montserrat, or Cormorant)
+Generous white space and breathing room
+Smooth, animated image galleries with hover effects
+Subtle parallax scrolling effects
+Micro-interactions (hover animations, smooth transitions, loading animations)
+Dark/Light mode toggle option
+Hero section with captivating visuals
+
+Responsive Design (CRITICAL):
+
+Mobile-first approach
+Fully responsive across all screen sizes (320px to 4K)
+Touch-friendly gestures for mobile (swipe galleries, smooth scrolling)
+Optimized image sizes for different devices
+Hamburger menu for mobile navigation
+Grid adapts: 1 column (mobile), 2 columns (tablet), 3-4 columns (desktop)
+
+UI Components Needed:
+
+Sticky/floating navigation bar
+Image gallery with smooth transitions
+Filter chips/buttons with active states
+Project cards with hover effects
+Modal/lightbox for full-screen image viewing
+Loading animations/skeleton screens
+Smooth page transitions
+Footer with company info and social links
+
+Technical Stack:
+
+React with Hooks or Next.js
+Tailwind CSS for styling with custom animations
+React Icons or Lucide React for icons
+Framer Motion or CSS animations for smooth transitions
+Image lazy loading
+Smooth scroll behavior
+
+UI Aesthetic:
+
+Think Behance, Awwwards, or luxury architecture portfolio sites
+Sophisticated color palette:
+
+Option 1: Black, white, gold accents
+Option 2: Warm neutrals (cream, taupe, charcoal)
+Option 3: Modern (deep navy, white, copper accents)
+
+
+Large, immersive hero images
+Elegant hover effects (zoom, overlay, fade)
+Modern card designs with shadows/depth
+Smooth, buttery animations (no jarring movements)
+
+Key Pages/Sections:
+
+Home/Landing - Hero section + featured projects grid
+All Projects - Complete gallery with filters
+Project Detail - Individual project showcase page
+About - Company story (placeholder content)
+Contact - Simple contact information display
+
+Priority Focus:
+
+Visual impact - Must look absolutely stunning
+Smooth performance - Buttery smooth animations, fast loading
+Easy navigation - Intuitive filtering and browsing
+Share-friendly - Simple, one-click sharing options
+Mobile excellence - Perfect mobile experience
+
+Inspiration Keywords:
+Premium, elegant, sophisticated, modern, minimal, luxurious, smooth, fluid, professional, artistic
+Make it feel like a high-end design studio's portfolio - something that would impress clients immediately and make them want to explore every project.
