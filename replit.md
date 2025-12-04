@@ -69,10 +69,22 @@ npm run dev
 Server runs on port 5000.
 
 ## Recent Changes
+- December 4, 2024: Myntra-style UI upgrade
+  - Replaced category icons with AI-generated interior design images
+  - Categories now displayed as beautiful circular image tiles (centered)
+  - Added Myntra-style product listing page for "View All":
+    - Sticky header with back button
+    - Sort dropdown (Newest/Oldest/Name A-Z/Z-A)
+    - Grid toggle (2 or 3 columns on desktop)
+    - Wishlist heart buttons on each product card
+    - Taller product cards with 3:4 aspect ratio
+    - Responsive grid (2 columns mobile, configurable desktop)
+  - AI-generated images stored in attached_assets/generated_images/
+
 - December 4, 2024: Major catalog redesign
   - Added beautiful interior background image to welcome screen with dark overlay
   - Redesigned catalog with section-based layout (jewelry catalog style):
-    - Category icons at top (Living Room, Bedroom, Kitchen, etc.)
+    - Category images at top (Living Room, Bedroom, Kitchen, etc.)
     - "New Arrivals" horizontal scroll section
     - "Trending Collection" horizontal scroll section
     - "Exclusive Collection" horizontal scroll section
