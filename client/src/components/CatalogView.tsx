@@ -8,13 +8,11 @@ import {
   Calendar, 
   X, 
   ChevronRight,
-  Sofa,
-  Bed,
-  ChefHat,
-  Bath,
-  Briefcase,
-  Building2,
-  Menu
+  Menu,
+  Heart,
+  ChevronDown,
+  Grid3X3,
+  LayoutGrid
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,17 +22,24 @@ import { ThemeToggle } from "./ThemeToggle";
 import type { Project, ProjectCategory, CollectionType } from "@shared/schema";
 import { categoryLabels, styleLabels } from "@shared/schema";
 
+import livingRoomImg from "@assets/generated_images/luxury_living_room_interior.png";
+import bedroomImg from "@assets/generated_images/luxury_bedroom_interior.png";
+import kitchenImg from "@assets/generated_images/luxury_kitchen_interior.png";
+import bathroomImg from "@assets/generated_images/luxury_bathroom_interior.png";
+import officeImg from "@assets/generated_images/luxury_office_interior.png";
+import commercialImg from "@assets/generated_images/luxury_commercial_interior.png";
+
 interface CatalogViewProps {
   onBack: () => void;
 }
 
-const categoryIcons: Record<ProjectCategory, typeof Sofa> = {
-  "living-room": Sofa,
-  "bedroom": Bed,
-  "kitchen": ChefHat,
-  "bathroom": Bath,
-  "office": Briefcase,
-  "commercial": Building2,
+const categoryImages: Record<ProjectCategory, string> = {
+  "living-room": livingRoomImg,
+  "bedroom": bedroomImg,
+  "kitchen": kitchenImg,
+  "bathroom": bathroomImg,
+  "office": officeImg,
+  "commercial": commercialImg,
 };
 
 const collectionLabels: Record<CollectionType, { title: string; highlight: string }> = {
@@ -54,24 +59,28 @@ function CategoryCard({
   isSelected: boolean;
   onClick: () => void;
 }) {
-  const Icon = categoryIcons[category];
+  const image = categoryImages[category];
   
   return (
     <motion.button
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`flex flex-col items-center gap-3 p-4 rounded-md transition-colors min-w-[100px] ${
+      className={`flex flex-col items-center gap-3 p-3 rounded-md transition-all min-w-[120px] ${
         isSelected 
-          ? "bg-gold/10 border-2 border-gold" 
-          : "bg-card border border-border hover:border-gold/50"
+          ? "ring-2 ring-gold ring-offset-2 ring-offset-background" 
+          : "hover:ring-1 hover:ring-gold/50"
       }`}
       data-testid={`button-category-${category}`}
     >
-      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-        isSelected ? "bg-gold text-white" : "bg-muted"
+      <div className={`w-20 h-20 rounded-full overflow-hidden border-2 transition-colors ${
+        isSelected ? "border-gold" : "border-border"
       }`}>
-        <Icon className="w-6 h-6" />
+        <img 
+          src={image} 
+          alt={label}
+          className="w-full h-full object-cover"
+        />
       </div>
       <span className={`text-sm font-medium text-center ${
         isSelected ? "text-gold" : "text-foreground"
@@ -330,6 +339,89 @@ function ProjectDetailModal({
   );
 }
 
+function MyntraProductCard({ 
+  project,
+  onClick 
+}: { 
+  project: Project;
+  onClick: () => void;
+}) {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      className="group relative bg-card rounded-md overflow-hidden border border-border"
+      data-testid={`product-card-${project.id}`}
+    >
+      <button
+        onClick={onClick}
+        className="w-full text-left"
+        data-testid={`button-product-${project.id}`}
+      >
+        <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+          <img
+            src={project.images[0]}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          {project.featured && (
+            <Badge 
+              className="absolute top-3 left-3 bg-gold text-white border-0 text-xs"
+            >
+              Featured
+            </Badge>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsWishlisted(!isWishlisted);
+            }}
+            className={`absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full h-9 w-9 ${
+              isWishlisted ? "text-red-500" : "text-muted-foreground"
+            }`}
+            data-testid={`button-wishlist-${project.id}`}
+          >
+            <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current" : ""}`} />
+          </Button>
+        </div>
+
+        <div className="p-4 space-y-2">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm text-foreground line-clamp-1 group-hover:text-gold transition-colors">
+                {project.title}
+              </h3>
+              <p className="text-xs text-muted-foreground line-clamp-1 mt-1">
+                {categoryLabels[project.category]}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <MapPin className="h-3 w-3 text-gold flex-shrink-0" />
+            <span className="truncate">{project.location}</span>
+          </div>
+          
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <Badge variant="outline" className="text-xs">
+              {styleLabels[project.style]}
+            </Badge>
+            <span className="text-xs text-muted-foreground">{project.area}</span>
+          </div>
+        </div>
+      </button>
+    </motion.div>
+  );
+}
+
 function FullCollectionView({
   collection,
   projects,
@@ -342,35 +434,111 @@ function FullCollectionView({
   onProjectClick: (project: Project) => void;
 }) {
   const labels = collectionLabels[collection];
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [gridCols, setGridCols] = useState<2 | 3 | 4>(3);
+
+  const sortedProjects = [...projects].sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return parseInt(b.year) - parseInt(a.year);
+      case "oldest":
+        return parseInt(a.year) - parseInt(b.year);
+      case "name-asc":
+        return a.title.localeCompare(b.title);
+      case "name-desc":
+        return b.title.localeCompare(a.title);
+      default:
+        return 0;
+    }
+  });
 
   return (
-    <div className="py-8" data-testid={`view-all-${collection}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onBack}
-            data-testid="button-back-collection"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h2 className="font-serif text-2xl sm:text-3xl">
-            <span className="text-gold italic">{labels.title}</span>{" "}
-            <span className="font-semibold">{labels.highlight}</span>
-          </h2>
+    <div className="min-h-screen bg-background" data-testid={`view-all-${collection}`}>
+      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 gap-4">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onBack}
+                data-testid="button-back-collection"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h2 className="font-serif text-lg sm:text-xl">
+                  <span className="text-gold italic">{labels.title}</span>{" "}
+                  <span className="font-semibold">{labels.highlight}</span>
+                </h2>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  {projects.length} {projects.length === 1 ? "design" : "designs"} found
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="hidden sm:flex items-center gap-1 border rounded-md p-1">
+                <Button
+                  variant={gridCols === 2 ? "default" : "ghost"}
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={() => setGridCols(2)}
+                  data-testid="button-grid-2"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={gridCols === 3 ? "default" : "ghost"}
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={() => setGridCols(3)}
+                  data-testid="button-grid-3"
+                >
+                  <Grid3X3 className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none bg-background border border-border rounded-md px-3 py-1.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 cursor-pointer"
+                  data-testid="select-sort"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="name-asc">Name A-Z</option>
+                  <option value="name-desc">Name Z-A</option>
+                </select>
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+              </div>
+            </div>
+          </div>
         </div>
-        
-        {projects.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {projects.map((project, index) => (
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="text-sm text-muted-foreground mb-4 text-center sm:text-left sm:hidden">
+          {projects.length} {projects.length === 1 ? "design" : "designs"} found
+        </div>
+
+        {sortedProjects.length > 0 ? (
+          <div className={`grid gap-4 sm:gap-6 ${
+            gridCols === 2 
+              ? "grid-cols-2 lg:grid-cols-2" 
+              : gridCols === 3 
+                ? "grid-cols-2 lg:grid-cols-3" 
+                : "grid-cols-2 lg:grid-cols-4"
+          }`}>
+            {sortedProjects.map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+                transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.3) }}
               >
-                <CollectionCard
+                <MyntraProductCard
                   project={project}
                   onClick={() => onProjectClick(project)}
                 />
@@ -379,7 +547,11 @@ function FullCollectionView({
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-muted-foreground">No projects found in this collection.</p>
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+              <LayoutGrid className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <p className="text-lg font-medium text-foreground mb-2">No designs found</p>
+            <p className="text-muted-foreground">Try adjusting your filters or check back later.</p>
           </div>
         )}
       </div>
@@ -475,7 +647,7 @@ export function CatalogView({ onBack }: CatalogViewProps) {
       <section className="py-8 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div 
-            className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0"
+            className="flex justify-center gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map(([category, label]) => (
