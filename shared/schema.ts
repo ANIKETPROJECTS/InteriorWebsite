@@ -18,8 +18,15 @@ export const projectStyleEnum = z.enum([
   "scandinavian"
 ]);
 
+export const collectionTypeEnum = z.enum([
+  "new",
+  "trending",
+  "exclusive"
+]);
+
 export type ProjectCategory = z.infer<typeof projectCategoryEnum>;
 export type ProjectStyle = z.infer<typeof projectStyleEnum>;
+export type CollectionType = z.infer<typeof collectionTypeEnum>;
 
 export const projectSchema = z.object({
   id: z.string(),
@@ -32,6 +39,7 @@ export const projectSchema = z.object({
   area: z.string(),
   year: z.string(),
   featured: z.boolean().optional(),
+  collection: collectionTypeEnum.optional(),
 });
 
 export type Project = z.infer<typeof projectSchema>;

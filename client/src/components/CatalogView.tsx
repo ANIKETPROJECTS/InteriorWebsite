@@ -1,96 +1,181 @@
-import { useState, useMemo } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, MapPin, Maximize2, Calendar, X } from "lucide-react";
+import { 
+  ArrowLeft, 
+  MapPin, 
+  Maximize2, 
+  Calendar, 
+  X, 
+  ChevronRight,
+  Sofa,
+  Bed,
+  ChefHat,
+  Bath,
+  Briefcase,
+  Building2,
+  Menu
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FilterSystem } from "./FilterSystem";
 import { ImageLightbox } from "./ImageLightbox";
 import { ShareModal } from "./ShareModal";
 import { ThemeToggle } from "./ThemeToggle";
-import type { Project, ProjectCategory, ProjectStyle } from "@shared/schema";
+import type { Project, ProjectCategory, CollectionType } from "@shared/schema";
 import { categoryLabels, styleLabels } from "@shared/schema";
 
 interface CatalogViewProps {
   onBack: () => void;
 }
 
-function CatalogProjectCard({ 
-  project, 
-  index,
+const categoryIcons: Record<ProjectCategory, typeof Sofa> = {
+  "living-room": Sofa,
+  "bedroom": Bed,
+  "kitchen": ChefHat,
+  "bathroom": Bath,
+  "office": Briefcase,
+  "commercial": Building2,
+};
+
+const collectionLabels: Record<CollectionType, { title: string; highlight: string }> = {
+  new: { title: "New", highlight: "Arrivals" },
+  trending: { title: "Trending", highlight: "Collection" },
+  exclusive: { title: "Exclusive", highlight: "Collection" },
+};
+
+function CategoryCard({ 
+  category, 
+  label, 
+  isSelected,
   onClick 
 }: { 
-  project: Project; 
-  index: number;
+  category: ProjectCategory;
+  label: string;
+  isSelected: boolean;
   onClick: () => void;
 }) {
+  const Icon = categoryIcons[category];
+  
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <motion.button
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className={`flex flex-col items-center gap-3 p-4 rounded-md transition-colors min-w-[100px] ${
+        isSelected 
+          ? "bg-gold/10 border-2 border-gold" 
+          : "bg-card border border-border hover:border-gold/50"
+      }`}
+      data-testid={`button-category-${category}`}
     >
-      <motion.article
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3 }}
-        className="group cursor-pointer"
-        onClick={onClick}
-        data-testid={`card-project-${project.id}`}
-      >
-        <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-muted">
-          <img
-            src={project.images[0]}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-            <span className="text-white/90 text-sm font-medium">View Project</span>
-          </div>
-        </div>
-        <div className="mt-4 space-y-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="secondary" className="text-xs">
-              {categoryLabels[project.category]}
-            </Badge>
-            <Badge variant="outline" className="text-xs">
-              {styleLabels[project.style]}
-            </Badge>
-          </div>
-          <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-gold transition-colors line-clamp-1">
-            {project.title}
-          </h3>
-          <p className="text-muted-foreground text-sm line-clamp-2">
-            {project.description}
-          </p>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>{project.location}</span>
-            <span className="w-1 h-1 rounded-full bg-muted-foreground" />
-            <span>{project.year}</span>
-          </div>
-        </div>
-      </motion.article>
-    </motion.div>
+      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+        isSelected ? "bg-gold text-white" : "bg-muted"
+      }`}>
+        <Icon className="w-6 h-6" />
+      </div>
+      <span className={`text-sm font-medium text-center ${
+        isSelected ? "text-gold" : "text-foreground"
+      }`}>
+        {label}
+      </span>
+    </motion.button>
   );
 }
 
-function CatalogProjectCardSkeleton() {
+function CollectionCard({ 
+  project,
+  onClick 
+}: { 
+  project: Project;
+  onClick: () => void;
+}) {
   return (
-    <div className="animate-pulse">
-      <div className="aspect-[4/3] rounded-md bg-muted relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+    <motion.button
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="flex-shrink-0 w-[280px] sm:w-[300px] text-left group"
+      data-testid={`card-project-${project.id}`}
+    >
+      <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-muted">
+        <img
+          src={project.images[0]}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+        {project.featured && (
+          <Badge 
+            className="absolute top-3 left-3 bg-gold text-white border-0"
+          >
+            Featured
+          </Badge>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
-      <div className="mt-4 space-y-3">
-        <div className="flex gap-2">
-          <div className="h-5 w-20 rounded-full bg-muted" />
-          <div className="h-5 w-16 rounded-full bg-muted" />
+      <div className="mt-3 space-y-1">
+        <h3 className="font-serif text-base font-semibold text-foreground group-hover:text-gold transition-colors line-clamp-1">
+          {project.title}
+        </h3>
+        <p className="text-sm text-muted-foreground line-clamp-1">
+          {project.location} | {project.area}
+        </p>
+      </div>
+    </motion.button>
+  );
+}
+
+function CollectionSection({ 
+  collection,
+  projects,
+  onProjectClick,
+  onViewAll
+}: { 
+  collection: CollectionType;
+  projects: Project[];
+  onProjectClick: (project: Project) => void;
+  onViewAll: () => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const labels = collectionLabels[collection];
+
+  if (projects.length === 0) return null;
+
+  return (
+    <section className="py-8" data-testid={`section-${collection}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <h2 className="font-serif text-2xl sm:text-3xl">
+            <span className="text-gold italic">{labels.title}</span>{" "}
+            <span className="font-semibold">{labels.highlight}</span>
+          </h2>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onViewAll}
+            className="gap-1 flex-shrink-0"
+            data-testid={`button-view-all-${collection}`}
+          >
+            View All
+            <ChevronRight className="w-4 h-4" />
+          </Button>
         </div>
-        <div className="h-6 w-3/4 rounded bg-muted" />
-        <div className="h-4 w-full rounded bg-muted" />
-        <div className="h-4 w-2/3 rounded bg-muted" />
+        
+        <div 
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {projects.map((project) => (
+            <CollectionCard
+              key={project.id}
+              project={project}
+              onClick={() => onProjectClick(project)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -245,63 +330,99 @@ function ProjectDetailModal({
   );
 }
 
+function FullCollectionView({
+  collection,
+  projects,
+  onBack,
+  onProjectClick,
+}: {
+  collection: CollectionType;
+  projects: Project[];
+  onBack: () => void;
+  onProjectClick: (project: Project) => void;
+}) {
+  const labels = collectionLabels[collection];
+
+  return (
+    <div className="py-8" data-testid={`view-all-${collection}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-4 mb-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onBack}
+            data-testid="button-back-collection"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <h2 className="font-serif text-2xl sm:text-3xl">
+            <span className="text-gold italic">{labels.title}</span>{" "}
+            <span className="font-semibold">{labels.highlight}</span>
+          </h2>
+        </div>
+        
+        {projects.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+              >
+                <CollectionCard
+                  project={project}
+                  onClick={() => onProjectClick(project)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-muted-foreground">No projects found in this collection.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function CatalogView({ onBack }: CatalogViewProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<ProjectCategory[]>([]);
-  const [selectedStyles, setSelectedStyles] = useState<ProjectStyle[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<ProjectCategory | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [viewingCollection, setViewingCollection] = useState<CollectionType | null>(null);
 
   const { data: projects, isLoading } = useQuery<Project[]>({
     queryKey: ["/api/projects"],
   });
 
-  const filteredProjects = useMemo(() => {
+  const categories = Object.entries(categoryLabels) as [ProjectCategory, string][];
+
+  const getProjectsByCollection = (collection: CollectionType) => {
     if (!projects) return [];
-
-    return projects.filter((project) => {
-      const matchesSearch =
-        !searchQuery ||
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.location.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(project.category);
-
-      const matchesStyle =
-        selectedStyles.length === 0 || selectedStyles.includes(project.style);
-
-      return matchesSearch && matchesCategory && matchesStyle;
-    });
-  }, [projects, searchQuery, selectedCategories, selectedStyles]);
-
-  const handleCategoryToggle = (category: ProjectCategory) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
-
-  const handleStyleToggle = (style: ProjectStyle) => {
-    setSelectedStyles((prev) =>
-      prev.includes(style)
-        ? prev.filter((s) => s !== style)
-        : [...prev, style]
-    );
-  };
-
-  const handleClearFilters = () => {
-    setSearchQuery("");
-    setSelectedCategories([]);
-    setSelectedStyles([]);
+    let filtered = projects.filter(p => p.collection === collection);
+    if (selectedCategory) {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+    return filtered;
   };
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
     setDetailOpen(true);
+  };
+
+  const handleCategoryClick = (category: ProjectCategory) => {
+    setSelectedCategory(prev => prev === category ? null : category);
+  };
+
+  const handleViewAll = (collection: CollectionType) => {
+    setViewingCollection(collection);
+  };
+
+  const handleBackFromCollection = () => {
+    setViewingCollection(null);
   };
 
   return (
@@ -318,102 +439,108 @@ export function CatalogView({ onBack }: CatalogViewProps) {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div>
-                <h1 className="font-serif text-xl font-semibold">Diffrient Interiors</h1>
-                <span className="text-xs text-muted-foreground">Portfolio Catalog</span>
-              </div>
             </div>
-            <ThemeToggle />
+            <h1 className="font-serif text-xl sm:text-2xl">
+              <span className="text-gold italic">Diffrient</span>{" "}
+              <span className="font-semibold">Catalog</span>
+            </h1>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button variant="ghost" size="icon" data-testid="button-menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="py-8 lg:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-gradient-to-r from-gold/5 via-gold/10 to-gold/5 py-2">
+        <div className="max-w-7xl mx-auto px-4 overflow-hidden">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
+            animate={{ x: [0, -100, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="flex items-center gap-8 text-sm text-gold whitespace-nowrap"
           >
-            <span className="text-gold text-sm font-medium uppercase tracking-wider">
-              Portfolio
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-semibold mt-3">
-              Our Projects
-            </h2>
-            <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
-              Browse our complete collection of interior design projects. 
-              Use filters to find your style.
-            </p>
+            <span>Premium Interior Designs</span>
+            <span className="w-1 h-1 rounded-full bg-gold" />
+            <span>Exclusive Collections</span>
+            <span className="w-1 h-1 rounded-full bg-gold" />
+            <span>Expert Craftsmanship</span>
+            <span className="w-1 h-1 rounded-full bg-gold" />
+            <span>Premium Interior Designs</span>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-8"
-          >
-            <FilterSystem
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedCategories={selectedCategories}
-              onCategoryToggle={handleCategoryToggle}
-              selectedStyles={selectedStyles}
-              onStyleToggle={handleStyleToggle}
-              onClearFilters={handleClearFilters}
-              resultCount={filteredProjects.length}
-            />
-          </motion.div>
-
-          {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-              {[...Array(8)].map((_, i) => (
-                <CatalogProjectCardSkeleton key={i} />
-              ))}
-            </div>
-          ) : filteredProjects.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
-            >
-              {filteredProjects.map((project, index) => (
-                <CatalogProjectCard 
-                  key={project.id} 
-                  project={project} 
-                  index={index}
-                  onClick={() => handleProjectClick(project)}
-                />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-20"
-            >
-              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl text-muted-foreground">?</span>
-              </div>
-              <h3 className="font-serif text-xl font-semibold mb-2">
-                No projects found
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your filters or search terms to find what you're looking for.
-              </p>
-              <button
-                onClick={handleClearFilters}
-                className="text-gold hover:text-gold-dark transition-colors"
-                data-testid="button-clear-filters-empty"
-              >
-                Clear all filters
-              </button>
-            </motion.div>
-          )}
         </div>
+      </div>
+
+      <section className="py-8 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div 
+            className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {categories.map(([category, label]) => (
+              <CategoryCard
+                key={category}
+                category={category}
+                label={label}
+                isSelected={selectedCategory === category}
+                onClick={() => handleCategoryClick(category)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <main>
+        {isLoading ? (
+          <div className="py-20 text-center">
+            <div className="w-12 h-12 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="mt-4 text-muted-foreground">Loading collections...</p>
+          </div>
+        ) : viewingCollection ? (
+          <FullCollectionView
+            collection={viewingCollection}
+            projects={getProjectsByCollection(viewingCollection)}
+            onBack={handleBackFromCollection}
+            onProjectClick={handleProjectClick}
+          />
+        ) : (
+          <>
+            <CollectionSection
+              collection="new"
+              projects={getProjectsByCollection("new")}
+              onProjectClick={handleProjectClick}
+              onViewAll={() => handleViewAll("new")}
+            />
+            
+            <div className="border-t border-border" />
+            
+            <CollectionSection
+              collection="trending"
+              projects={getProjectsByCollection("trending")}
+              onProjectClick={handleProjectClick}
+              onViewAll={() => handleViewAll("trending")}
+            />
+            
+            <div className="border-t border-border" />
+            
+            <CollectionSection
+              collection="exclusive"
+              projects={getProjectsByCollection("exclusive")}
+              onProjectClick={handleProjectClick}
+              onViewAll={() => handleViewAll("exclusive")}
+            />
+          </>
+        )}
       </main>
+
+      <footer className="py-8 border-t border-border mt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-muted-foreground">
+            Diffrient Interiors - Crafting exceptional spaces
+          </p>
+        </div>
+      </footer>
 
       <ProjectDetailModal
         project={selectedProject}

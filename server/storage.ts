@@ -13,7 +13,7 @@ const projectData: Project[] = [
   {
     id: "1",
     title: "Manhattan Penthouse Living",
-    description: "A stunning modern living room in a Manhattan penthouse featuring floor-to-ceiling windows with breathtaking city views. The space showcases a harmonious blend of contemporary furniture, warm textures, and gold accents that create an atmosphere of understated luxury. Custom millwork and carefully curated art pieces complete this sophisticated urban retreat.",
+    description: "A stunning modern living room in a Manhattan penthouse featuring floor-to-ceiling windows with breathtaking city views. The space showcases a harmonious blend of contemporary furniture, warm textures, and gold accents that create an atmosphere of understated luxury.",
     category: "living-room",
     style: "modern",
     images: [
@@ -25,11 +25,12 @@ const projectData: Project[] = [
     area: "2,400 sq ft",
     year: "2024",
     featured: true,
+    collection: "new",
   },
   {
     id: "2",
     title: "Heritage Estate Drawing Room",
-    description: "An elegant traditional living room that pays homage to classic European design. Rich wood paneling, a stunning marble fireplace, and carefully selected antiques create a space that feels both timeless and inviting. The emerald velvet furnishings add a touch of modern color to this sophisticated setting.",
+    description: "An elegant traditional living room that pays homage to classic European design. Rich wood paneling, a stunning marble fireplace, and carefully selected antiques create a space that feels both timeless and inviting.",
     category: "living-room",
     style: "traditional",
     images: [
@@ -40,11 +41,12 @@ const projectData: Project[] = [
     area: "1,800 sq ft",
     year: "2023",
     featured: true,
+    collection: "exclusive",
   },
   {
     id: "3",
     title: "Scandinavian Sanctuary",
-    description: "A serene bedroom retreat inspired by Nordic design principles. Natural light floods the space through sheer curtains, illuminating the warm oak furniture and soft linen bedding. Every element has been carefully chosen to promote rest and relaxation while maintaining a connection to nature.",
+    description: "A serene bedroom retreat inspired by Nordic design principles. Natural light floods the space through sheer curtains, illuminating the warm oak furniture and soft linen bedding.",
     category: "bedroom",
     style: "scandinavian",
     images: [
@@ -55,11 +57,12 @@ const projectData: Project[] = [
     area: "450 sq ft",
     year: "2024",
     featured: true,
+    collection: "trending",
   },
   {
     id: "4",
     title: "Contemporary Master Suite",
-    description: "A sophisticated master bedroom that embodies contemporary elegance. The neutral palette of greys and taupes is punctuated by statement lighting and textural elements. The upholstered headboard serves as a focal point, while plush textiles create an inviting atmosphere perfect for unwinding.",
+    description: "A sophisticated master bedroom that embodies contemporary elegance. The neutral palette of greys and taupes is punctuated by statement lighting and textural elements.",
     category: "bedroom",
     style: "contemporary",
     images: [
@@ -71,11 +74,12 @@ const projectData: Project[] = [
     area: "600 sq ft",
     year: "2023",
     featured: true,
+    collection: "new",
   },
   {
     id: "5",
     title: "Minimalist Chef's Kitchen",
-    description: "A pristine white kitchen that exemplifies minimalist design at its finest. Handleless cabinetry creates clean lines throughout, while a dramatic waterfall marble island serves as the centerpiece. Integrated appliances and open shelving maintain the uncluttered aesthetic that defines this space.",
+    description: "A pristine white kitchen that exemplifies minimalist design at its finest. Handleless cabinetry creates clean lines throughout, while a dramatic waterfall marble island serves as the centerpiece.",
     category: "kitchen",
     style: "minimalist",
     images: [
@@ -87,11 +91,12 @@ const projectData: Project[] = [
     area: "350 sq ft",
     year: "2024",
     featured: true,
+    collection: "trending",
   },
   {
     id: "6",
     title: "Industrial Loft Kitchen",
-    description: "A bold industrial kitchen set within a converted warehouse space. Exposed brick walls and steel-framed windows provide an authentic backdrop for the custom concrete countertops and copper pipe shelving. Vintage-inspired pendant lights add warmth to the urban aesthetic.",
+    description: "A bold industrial kitchen set within a converted warehouse space. Exposed brick walls and steel-framed windows provide an authentic backdrop for the custom concrete countertops.",
     category: "kitchen",
     style: "industrial",
     images: [
@@ -103,11 +108,12 @@ const projectData: Project[] = [
     area: "400 sq ft",
     year: "2023",
     featured: false,
+    collection: "exclusive",
   },
   {
     id: "7",
     title: "Spa-Inspired Bathroom Retreat",
-    description: "A luxurious bathroom that transforms daily rituals into spa-like experiences. The freestanding soaking tub takes center stage against floor-to-ceiling marble walls. Thoughtful lighting design and premium fixtures create an atmosphere of pure indulgence and relaxation.",
+    description: "A luxurious bathroom that transforms daily rituals into spa-like experiences. The freestanding soaking tub takes center stage against floor-to-ceiling marble walls.",
     category: "bathroom",
     style: "modern",
     images: [
@@ -119,11 +125,12 @@ const projectData: Project[] = [
     area: "200 sq ft",
     year: "2024",
     featured: true,
+    collection: "new",
   },
   {
     id: "8",
     title: "Contemporary Urban Bathroom",
-    description: "A sleek contemporary bathroom featuring large-format tiles and frameless glass elements. The double vanity with backlit mirror provides ample space and soft ambient lighting. Brass fixtures add a touch of warmth to the predominantly grey palette.",
+    description: "A sleek contemporary bathroom featuring large-format tiles and frameless glass elements. The double vanity with backlit mirror provides ample space and soft ambient lighting.",
     category: "bathroom",
     style: "contemporary",
     images: [
@@ -134,11 +141,12 @@ const projectData: Project[] = [
     area: "180 sq ft",
     year: "2023",
     featured: false,
+    collection: "trending",
   },
   {
     id: "9",
     title: "Executive Home Office",
-    description: "A distinguished home office designed for the modern professional. Rich walnut wood furniture and built-in bookshelves create an atmosphere of authority and focus. Large windows provide natural light and inspiring city views, while carefully selected art and accessories add personal touches.",
+    description: "A distinguished home office designed for the modern professional. Rich walnut wood furniture and built-in bookshelves create an atmosphere of authority and focus.",
     category: "office",
     style: "modern",
     images: [
@@ -150,11 +158,12 @@ const projectData: Project[] = [
     area: "280 sq ft",
     year: "2024",
     featured: true,
+    collection: "exclusive",
   },
   {
     id: "10",
     title: "Boutique Hotel Lobby",
-    description: "A dramatic commercial space that sets the tone for a luxury boutique hotel. Soaring ceilings showcase a sculptural lighting installation, while curved seating areas invite guests to linger. The marble flooring and carefully curated indoor plants create an atmosphere of refined elegance.",
+    description: "A dramatic commercial space that sets the tone for a luxury boutique hotel. Soaring ceilings showcase a sculptural lighting installation, while curved seating areas invite guests to linger.",
     category: "commercial",
     style: "contemporary",
     images: [
@@ -166,6 +175,7 @@ const projectData: Project[] = [
     area: "3,500 sq ft",
     year: "2024",
     featured: true,
+    collection: "trending",
   },
 ];
 

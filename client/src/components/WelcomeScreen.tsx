@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import interiorBg from "@assets/stock_images/luxury_modern_interi_fa9835d5.jpg";
 
 interface WelcomeScreenProps {
   onEnterCatalog: () => void;
@@ -9,18 +10,14 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onEnterCatalog }: WelcomeScreenProps) {
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/30" />
-      
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.03 }}
-        transition={{ duration: 2 }}
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a574' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center">
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${interiorBg})` }}
+        data-testid="background-interior-image"
       />
+      
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
 
       <div className="absolute top-4 right-4 z-10">
         <ThemeToggle />
@@ -51,7 +48,7 @@ export function WelcomeScreen({ onEnterCatalog }: WelcomeScreenProps) {
             className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold tracking-tight"
             data-testid="heading-brand-name"
           >
-            <span className="block" data-testid="text-brand-diffrient">Diffrient</span>
+            <span className="block text-white" data-testid="text-brand-diffrient">Diffrient</span>
             <span className="block text-gold" data-testid="text-brand-interiors">Interiors</span>
           </motion.h1>
 
@@ -59,7 +56,7 @@ export function WelcomeScreen({ onEnterCatalog }: WelcomeScreenProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-8 text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto leading-relaxed"
+            className="mt-8 text-white/80 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed"
             data-testid="text-tagline"
           >
             Crafting exceptional spaces that inspire, transform, and elevate everyday living
@@ -88,7 +85,7 @@ export function WelcomeScreen({ onEnterCatalog }: WelcomeScreenProps) {
             transition={{ duration: 1, delay: 1.2 }}
             className="mt-16"
           >
-            <div className="w-12 h-0.5 bg-border mx-auto" />
+            <div className="w-12 h-0.5 bg-white/30 mx-auto" />
           </motion.div>
         </motion.div>
       </div>
@@ -102,11 +99,11 @@ export function WelcomeScreen({ onEnterCatalog }: WelcomeScreenProps) {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="text-muted-foreground text-sm"
+          className="text-white/70 text-sm"
         >
           <div className="flex flex-col items-center gap-2">
-            <span className="text-xs uppercase tracking-wider">Scroll to explore</span>
-            <div className="w-5 h-8 border-2 border-muted-foreground/30 rounded-full flex justify-center pt-1">
+            <span className="text-xs uppercase tracking-wider" data-testid="text-scroll-indicator">Scroll to explore</span>
+            <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center pt-1">
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

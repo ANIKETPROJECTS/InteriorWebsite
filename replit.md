@@ -69,7 +69,18 @@ npm run dev
 Server runs on port 5000.
 
 ## Recent Changes
-- December 4, 2024: Transformed into digital catalog format
+- December 4, 2024: Major catalog redesign
+  - Added beautiful interior background image to welcome screen with dark overlay
+  - Redesigned catalog with section-based layout (jewelry catalog style):
+    - Category icons at top (Living Room, Bedroom, Kitchen, etc.)
+    - "New Arrivals" horizontal scroll section
+    - "Trending Collection" horizontal scroll section
+    - "Exclusive Collection" horizontal scroll section
+  - Added collection tags to schema (new, trending, exclusive)
+  - Implemented "View All" functionality for each collection
+  - Removed old filter-based grid layout
+  
+- December 4, 2024: Initial catalog transformation
   - Created WelcomeScreen component with branded splash
   - Created CatalogView component with integrated project detail modal
   - Removed multi-page website structure (Navigation, Footer, separate pages)
