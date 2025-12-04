@@ -1,7 +1,7 @@
-# Luxe Interiors - Digital Interior Design Portfolio
+# Diffrient Interiors - Digital Design Catalog
 
 ## Overview
-A stunning, modern digital catalogue for an interior design company featuring a beautiful portfolio showcase with advanced filtering, smooth animations, and comprehensive sharing capabilities.
+A beautiful digital catalog for Diffrient Interiors, featuring a welcome screen and portfolio showcase with advanced filtering, smooth animations, and comprehensive sharing capabilities. This is a single-page catalog experience (not a multi-page website).
 
 ## Tech Stack
 - **Frontend**: React 18, TypeScript, Tailwind CSS, Framer Motion
@@ -10,10 +10,12 @@ A stunning, modern digital catalogue for an interior design company featuring a 
 - **Typography**: Playfair Display (headings) + Montserrat (body)
 
 ## Key Features
-- Beautiful masonry grid gallery with 10 interior design projects
+- Elegant welcome screen with "View Catalog" call-to-action
+- Beautiful project grid gallery with 10 interior design projects
 - Category filtering (Living Room, Bedroom, Kitchen, Bathroom, Office, Commercial)
 - Style filtering (Modern, Contemporary, Minimalist, Traditional, Industrial, Scandinavian)
 - Real-time search functionality
+- Project detail modal with image gallery
 - Image lightbox with keyboard navigation
 - Comprehensive sharing (WhatsApp, Email, Facebook, Pinterest, QR code)
 - Dark/light mode toggle
@@ -25,28 +27,30 @@ A stunning, modern digital catalogue for an interior design company featuring a 
 client/
 ├── src/
 │   ├── components/
-│   │   ├── Navigation.tsx      # Sticky header with mobile menu
-│   │   ├── Hero.tsx            # Homepage hero with parallax
-│   │   ├── ProjectCard.tsx     # Project card with hover effects
+│   │   ├── WelcomeScreen.tsx   # Welcome/splash screen with View Catalog button
+│   │   ├── CatalogView.tsx     # Main catalog with grid, filters, detail modal
 │   │   ├── FilterSystem.tsx    # Category/style filters + search
 │   │   ├── ImageLightbox.tsx   # Full-screen image viewer
 │   │   ├── ShareModal.tsx      # Social sharing + QR code
-│   │   ├── ThemeToggle.tsx     # Dark/light mode toggle
-│   │   └── Footer.tsx          # Site footer
-│   ├── pages/
-│   │   ├── Home.tsx            # Landing with hero + featured
-│   │   ├── Projects.tsx        # All projects with filters
-│   │   ├── ProjectDetail.tsx   # Individual project view
-│   │   ├── About.tsx           # Company story + team
-│   │   └── Contact.tsx         # Contact information
-│   └── lib/
-│       └── theme.tsx           # Theme context provider
+│   │   └── ThemeToggle.tsx     # Dark/light mode toggle
+│   ├── lib/
+│   │   └── theme.tsx           # Theme context provider
+│   └── App.tsx                 # Main app with welcome/catalog state
 server/
 ├── routes.ts                   # API endpoints
 └── storage.ts                  # In-memory project data
 shared/
 └── schema.ts                   # TypeScript types + Zod schemas
 ```
+
+## User Flow
+1. User lands on welcome screen with Diffrient Interiors branding
+2. Click "View Catalog" to transition to catalog view
+3. Browse projects, use filters/search to find specific designs
+4. Click a project to view details in a modal
+5. Open lightbox for full-screen image viewing
+6. Share projects via social media, email, or QR code
+7. Toggle dark/light mode at any time
 
 ## API Endpoints
 - `GET /api/projects` - Get all projects
@@ -65,10 +69,9 @@ npm run dev
 Server runs on port 5000.
 
 ## Recent Changes
-- December 4, 2024: Initial implementation of complete portfolio system
-  - Created all frontend components with Framer Motion animations
-  - Implemented responsive design with mobile hamburger menu
-  - Added dark/light theme toggle
-  - Created 10 sample interior design projects
-  - Implemented filtering and search functionality
-  - Added share modal with social media and QR code support
+- December 4, 2024: Transformed into digital catalog format
+  - Created WelcomeScreen component with branded splash
+  - Created CatalogView component with integrated project detail modal
+  - Removed multi-page website structure (Navigation, Footer, separate pages)
+  - Rebranded from "Luxe Interiors" to "Diffrient Interiors"
+  - Simplified to welcome screen + catalog view experience

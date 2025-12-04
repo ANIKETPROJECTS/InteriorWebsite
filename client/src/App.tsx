@@ -1,66 +1,44 @@
-import { Switch, Route } from "wouter";
+import { useState } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/theme";
 import { AnimatePresence, motion } from "framer-motion";
-import Home from "@/pages/Home";
-import Projects from "@/pages/Projects";
-import ProjectDetail from "@/pages/ProjectDetail";
-import About from "@/pages/About";
-import Contact from "@/pages/Contact";
-import NotFound from "@/pages/not-found";
+import { WelcomeScreen } from "@/components/WelcomeScreen";
+import { CatalogView } from "@/components/CatalogView";
 
-function PageTransition({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
+type AppView = "welcome" | "catalog";
 
-function Router() {
+function AppContent() {
+  const [currentView, setCurrentView] = useState<AppView>("welcome");
+
   return (
-    <AnimatePresence mode="wait">
-      <Switch>
-        <Route path="/">
-          <PageTransition>
-            <Home />
-          </PageTransition>
-        </Route>
-        <Route path="/projects">
-          <PageTransition>
-            <Projects />
-          </PageTransition>
-        </Route>
-        <Route path="/projects/:id">
-          <PageTransition>
-            <ProjectDetail />
-          </PageTransition>
-        </Route>
-        <Route path="/about">
-          <PageTransition>
-            <About />
-          </PageTransition>
-        </Route>
-        <Route path="/contact">
-          <PageTransition>
-            <Contact />
-          </PageTransition>
-        </Route>
-        <Route>
-          <PageTransition>
-            <NotFound />
-          </PageTransition>
-        </Route>
-      </Switch>
-    </AnimatePresence>
+    <div className="min-h-screen bg-background text-foreground">
+      <AnimatePresence mode="wait">
+        {currentView === "welcome" ? (
+          <motion.div
+            key="welcome"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <WelcomeScreen onEnterCatalog={() => setCurrentView("catalog")} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="catalog"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CatalogView onBack={() => setCurrentView("welcome")} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -69,9 +47,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
-          <div className="min-h-screen bg-background text-foreground">
-            <Router />
-          </div>
+          <AppContent />
           <Toaster />
         </TooltipProvider>
       </ThemeProvider>
